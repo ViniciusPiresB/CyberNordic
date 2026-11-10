@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sinais com a Mão</title>
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="assets/icones/icone-192.png">
+<link rel="apple-touch-icon" href="assets/icones/icone-192.png">
+<meta name="theme-color" content="#111111">
+<link rel="stylesheet" href="css/estilos.css">
+</head>
+<body>
+<header>
+  <h1>Sinais com a Mão</h1>
+  <div>
+    <button id="btnInstalar" hidden>Instalar</button>
+    <button id="btnTrocar" disabled>Trocar câmera</button>
+    <button id="btnIniciar" disabled>Iniciar</button>
+  </div>
+</header>
+
+<div id="palco">
+  <video id="video" playsinline muted></video>
+  <canvas id="canvas"></canvas>
+</div>
+
+<div id="resultado">
+  <div id="gesto">✋</div>
+  <div id="nome">Aproxime a mão da câmera</div>
+  <div id="detalhe"></div>
+</div>
+<div id="status">Carregando modelo...</div>
+
+<script type="module" src="js/app.js"></script>
+</body>
+</html>
