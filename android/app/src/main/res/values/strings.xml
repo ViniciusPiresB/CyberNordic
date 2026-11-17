@@ -1,7 +1,10 @@
-<?xml version='1.0' encoding='utf-8'?>
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Sinais com a Mão</string>
-    <string name="title_activity_main">Sinais com a Mão</string>
-    <string name="package_name">com.sinaisbuzz.app</string>
-    <string name="custom_url_scheme">com.sinaisbuzz.app</string>
+    <string name="trocar_camera">Trocar câmera</string>
+    <string name="iniciar">Iniciar</string>
+    <string name="parar">Parar</string>
+    <string name="aproxime_a_mao">Aproxime a mão da câmera</string>
+    <string name="carregando_modelo">Carregando modelo...</string>
+    <string name="sem_permissao_camera">Sem permissão para usar a câmera</string>
 </resources>

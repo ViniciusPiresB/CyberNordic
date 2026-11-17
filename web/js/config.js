@@ -9,6 +9,13 @@ export const TEMPO_SEGURAR_GESTO_MS = 1000;
 // Falhas rápidas de leitura até este tempo não zeram a contagem
 export const TOLERANCIA_LEITURA_MS = 250;
 
+// Onde a análise roda: "auto" mede o aparelho ao abrir; "CPU" ou "GPU" forçam a escolha.
+// A GPU não detecta mãos em alguns aparelhos (ex.: Galaxy S25), mas é bem mais rápida em CPUs fracas (ex.: Galaxy Tab A7).
+export const PROCESSADOR = "auto";
+
+// No modo "auto", usa a CPU se ela analisar um quadro em até este tempo
+export const LIMITE_CPU_RAPIDA_MS = 150;
+
 export const GESTOS = {
   aberta:    { emoji: "🖐️", nome: "Mão aberta",         audio: "assets/audios/pronto-para-a-missao.mp3" },  // "Patrulheiro espacial Buzz Lightyear, pronto para a missão"
   um:        { emoji: "☝️", nome: "1 dedo levantado",   audio: "assets/audios/comando-estelar.mp3" },       // "Eu sou Buzz Lightyear, do comando estelar"

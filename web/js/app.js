@@ -146,9 +146,9 @@ const aviso = setTimeout(() => {
 }, 30000);
 
 carregarDetector(mensagem => { elStatus.textContent = mensagem; })
-  .then(d => {
-    detector = d;
-    elStatus.textContent = "Modelo pronto. Toque em Iniciar.";
+  .then(carregado => {
+    detector = carregado.detector;
+    elStatus.textContent = `Modelo pronto (${carregado.processador}). Toque em Iniciar.`;
     btnIniciar.disabled = false;
   })
   .catch(e => {

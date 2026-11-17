@@ -17,12 +17,27 @@ Para ativar, a mão precisa estar perto da câmera e segurar o gesto por 1 segun
 | 🤙 Hang loose | "Missão atualizada, brincar com a criança" |
 | ✊ Mão fechada | "Ao infinito..." |
 
+Há duas versões com o mesmo comportamento:
+
+- **App Android nativo** (Kotlin), em `android/`: a versão principal, mais rápida.
+- **Versão para navegador**, em `web/`: roda em qualquer navegador moderno e pode ser instalada pelo link.
+
+Os áudios, ícones e o modelo de mãos ficam em `web/` e são usados pelas duas.
+
 ## Estrutura
 
 ```text
 sinais-com-a-mao/
-├── web/                     Código do app (é aqui que se edita)
-│   ├── index.html           Tela
+├── android/                         App Android nativo (Kotlin)
+│   └── app/src/main/java/com/sinaisbuzz/app/
+│       ├── Config.kt                Tempos, distância, processador, gestos e falas
+│       ├── MainActivity.kt          Ponto de entrada: câmera, tela e reconhecimento
+│       ├── RegrasDeGestos.kt        Regras de reconhecimento e tempo de segurar
+│       ├── DetectorDeMaos.kt        Carrega o MediaPipe
+│       ├── SobreposicaoMaos.kt      Desenha os pontos da mão
+│       └── Falas.kt                 Toca os áudios
+├── web/                             Versão para navegador
+│   ├── index.html                   Tela
 │   ├── css/estilos.css      Aparência
 │   ├── js/
 │   │   ├── config.js        Tempos, distância, gestos e falas
@@ -32,29 +47,28 @@ sinais-com-a-mao/
 │   │   ├── desenho.js       Desenha os pontos da mão
 │   │   ├── falas.js         Toca os áudios
 │   │   └── instalacao.js    Instalação pelo navegador
-│   ├── assets/              Áudios e ícones
-│   ├── vendor/mediapipe/    Motor de visão e modelo (não editar)
-│   ├── manifest.json        Dados do app para instalação pelo navegador
-│   └── service-worker.js    Guarda os arquivos para uso sem internet
-├── android/                 Projeto Android (permissões e ícones do APK)
-├── scripts/gerar-apk.mjs    Gera o APK
-└── dist/                    APK pronto (gerado, não vai para o git)
+│   ├── assets/                      Áudios e ícones (usados também pelo APK)
+│   ├── vendor/mediapipe/            Motor de visão e modelo (não editar)
+│   ├── manifest.json                Dados do app para instalação pelo navegador
+│   └── service-worker.js            Guarda os arquivos para uso sem internet
+├── scripts/gerar-apk.mjs            Gera o APK
+└── dist/                            APK pronto (gerado, não vai para o git)
 ```
 
 ## Ajustes comuns
 
-Tudo fica em `web/js/config.js`:
+No app Android, em `android/app/src/main/java/com/sinaisbuzz/app/Config.kt`. Na versão para navegador, em `web/js/config.js`.
 
-- `TEMPO_SEGURAR_GESTO_MS`: tempo segurando o gesto até ativar.
-- `TAMANHO_MINIMO_MAO`: quão perto a mão precisa estar.
-- `GESTOS`: emoji, nome e áudio de cada gesto.
+- Tempo segurando o gesto até ativar (`TEMPO_SEGURAR_GESTO_MS`).
+- Quão perto a mão precisa estar (`TAMANHO_MINIMO_MAO`).
+- Emoji, nome e áudio de cada gesto.
+- No Android: `PROCESSADOR` escolhe GPU ou CPU, e `MAXIMO_MAOS` quantas mãos procurar.
 
 ## Gerar o APK
 
 Requer Node.js, JDK 21 e Android SDK 36. O SDK é indicado em `android/local.properties`.
 
 ```bash
-npm install
 npm run apk
 ```
 

@@ -1,6 +1,6 @@
 // Guarda tudo no aparelho para o app abrir sem PC e sem internet.
 // Ao mudar a lista abaixo ou qualquer arquivo dela, aumente a versão para o celular baixar de novo.
-const CACHE = "sinais-v1";
+const CACHE = "sinais-v2";
 
 const ARQUIVOS = [
   "index.html",

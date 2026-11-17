@@ -1,4 +1,4 @@
-// Atualiza o projeto Android com a pasta web/ e gera dist/sinais-com-a-mao.apk
+// Compila o app Android nativo e gera dist/sinais-com-a-mao.apk
 import { spawnSync } from "node:child_process";
 import { copyFileSync, mkdirSync, readdirSync } from "node:fs";
 import { homedir } from "node:os";
@@ -25,7 +25,6 @@ function executar(comando, pasta) {
   if (status !== 0) process.exit(status ?? 1);
 }
 
-executar("npx cap sync android", raiz);
 const gradle = process.platform === "win32" ? ".\\gradlew.bat" : "./gradlew";
 executar(`${gradle} assembleDebug --no-daemon --console=plain`, join(raiz, "android"));
 
