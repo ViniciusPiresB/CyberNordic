@@ -117,15 +117,24 @@ class MainActivity : AppCompatActivity() {
             camera = provedor
             if (!rodando) return@addListener
 
-            // Imagem 4:3 pequena: suficiente para o modelo e leve para aparelhos simples
-            val formato = ResolutionSelector.Builder()
+            // Prévia e análise no mesmo formato 4:3, para os pontos caírem em cima da mão.
+            // A prévia fica nítida; a análise usa uma imagem pequena, que é mais rápida.
+            val formatoPrevia = ResolutionSelector.Builder()
                 .setAspectRatioStrategy(AspectRatioStrategy.RATIO_4_3_FALLBACK_AUTO_STRATEGY)
-                .setResolutionStrategy(ResolutionStrategy(Size(640, 480), ResolutionStrategy.FALLBACK_RULE_CLOSEST_HIGHER_THEN_LOWER))
                 .build()
-            val previa = Preview.Builder().setResolutionSelector(formato).build()
+            val formatoAnalise = ResolutionSelector.Builder()
+                .setAspectRatioStrategy(AspectRatioStrategy.RATIO_4_3_FALLBACK_AUTO_STRATEGY)
+                .setResolutionStrategy(
+                    ResolutionStrategy(
+                        Size(Config.LARGURA_ANALISE, Config.ALTURA_ANALISE),
+                        ResolutionStrategy.FALLBACK_RULE_CLOSEST_HIGHER_THEN_LOWER
+                    )
+                )
+                .build()
+            val previa = Preview.Builder().setResolutionSelector(formatoPrevia).build()
             previa.surfaceProvider = tela.camera.surfaceProvider
             val quadros = ImageAnalysis.Builder()
-                .setResolutionSelector(formato)
+                .setResolutionSelector(formatoAnalise)
                 .setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST)
                 .setOutputImageFormat(ImageAnalysis.OUTPUT_IMAGE_FORMAT_RGBA_8888)
                 .build()
@@ -152,6 +161,23 @@ class MainActivity : AppCompatActivity() {
         // O MediaPipe gira a imagem por conta própria, o que é mais rápido que girar o bitmap
         val resultado = det.detectar(imagem, rotacao, SystemClock.uptimeMillis())
         processar(resultado, imagem.width, imagem.height, rotacao)
+        esconderMaosDistantes(det, resultado, imagem.width, imagem.height)
+    }
+
+    // Se as vagas estão ocupadas só por mãos distantes há algum tempo, esconde essas mãos
+    // para que o detector encontre uma mão próxima
+    private var inicioSoDistantes = 0L
+    private fun esconderMaosDistantes(det: DetectorDeMaos, resultado: HandLandmarkerResult, largura: Int, altura: Int) {
+        val maos = resultado.landmarks()
+        val soDistantes = maos.size >= Config.MAXIMO_MAOS &&
+            maos.all { RegrasDeGestos.tamanhoMao(it, largura, altura) < Config.TAMANHO_MINIMO_MAO }
+        val agora = SystemClock.uptimeMillis()
+        if (!soDistantes) inicioSoDistantes = 0L
+        else if (inicioSoDistantes == 0L) inicioSoDistantes = agora
+        else if (agora - inicioSoDistantes >= Config.TEMPO_ATE_ESCONDER_MS) {
+            maos.forEach { det.esconder(it, agora) }
+            inicioSoDistantes = 0L
+        }
     }
 
     // largura e altura são da imagem como sai do sensor; os pontos vêm nessa mesma orientação

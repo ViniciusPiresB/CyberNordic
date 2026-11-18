@@ -13,8 +13,23 @@ object Config {
     // Falhas rápidas de leitura até este tempo não zeram a contagem
     const val TOLERANCIA_LEITURA_MS = 250L
 
-    // Mais vagas evitam que mãos distantes "ocupem" o lugar da mão próxima
-    const val MAXIMO_MAOS = 4
+    // Quantas mãos acompanhar ao mesmo tempo. Com todas as vagas ocupadas o detector de palma
+    // deixa de rodar, o que deixa a análise bem mais rápida; por isso, 1 vaga.
+    const val MAXIMO_MAOS = 1
+
+    // Se a mão acompanhada ficar distante por este tempo, a região dela é escondida (pintada de preto)
+    // para que o detector encontre uma mão próxima no lugar
+    const val TEMPO_ATE_ESCONDER_MS = 300L
+
+    // Por quanto tempo uma mão distante fica escondida
+    const val TEMPO_ESCONDIDA_MS = 1500L
+
+    // Folga ao redor da mão escondida, em fração do tamanho dela
+    const val MARGEM_ESCONDER = 0.3f
+
+    // Tamanho da imagem analisada. Como só mãos próximas contam, uma imagem pequena basta.
+    const val LARGURA_ANALISE = 320
+    const val ALTURA_ANALISE = 240
 
     // Onde a análise roda. No Galaxy Tab A7 a GPU é cerca de 3x mais rápida que a CPU.
     // Se a GPU falhar ao iniciar, o app volta para a CPU.

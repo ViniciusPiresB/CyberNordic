@@ -62,7 +62,15 @@ No app Android, em `android/app/src/main/java/com/sinaisbuzz/app/Config.kt`. Na 
 - Tempo segurando o gesto até ativar (`TEMPO_SEGURAR_GESTO_MS`).
 - Quão perto a mão precisa estar (`TAMANHO_MINIMO_MAO`).
 - Emoji, nome e áudio de cada gesto.
-- No Android: `PROCESSADOR` escolhe GPU ou CPU, e `MAXIMO_MAOS` quantas mãos procurar.
+- No Android: `PROCESSADOR` escolhe GPU ou CPU.
+
+## Desempenho no Android
+
+O app acompanha **uma mão por vez**: com a vaga ocupada, o detector de palma deixa de rodar, o que
+praticamente dobra o FPS em aparelhos simples (no Galaxy Tab A7, de ~5 para ~10 FPS).
+Para que uma mão distante não tome a vaga de uma próxima, se a mão acompanhada ficar longe por
+0,3 s, a região dela é pintada de preto por 1,5 s antes de ir para o detector, que então encontra
+a mão próxima. Esses tempos ficam em `Config.kt`.
 
 ## Gerar o APK
 
